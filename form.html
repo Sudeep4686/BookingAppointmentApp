@@ -13,13 +13,22 @@
         <script>
             function saveToLocalStorage(event){
                 event.preventDefault();
-                const name=event.target.username.value;
-                const email=event.target.emailId.value;
-                const phone = event.target.phone.value;
+            
+                name=event.target.username.value,
+                email=event.target.emailId.value,
+                phone = event.target.phone.value
                 localStorage.setItem('name',name);
                 localStorage.setItem('email', email);
                 localStorage.setItem('phone', phone)
-            }
+                const obj = {
+                    name,email,phone
+                }
+                let userDetails_serialised = JSON.stringify(obj);
+                localStorage.setItem('obj',userDetails_serialised)
+
+                };
+
+            
         </script>
     </body>
 </html>
