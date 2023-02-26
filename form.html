@@ -10,7 +10,9 @@
             <input type="tel" id="phone" name="phone" required/>
             <button>Submit</button>
         </form>
-        <ul id="listOfItems"></ul>
+        <ul id="listOfItems"> </ul>
+            
+       
         <script>
             function saveToLocalStorage(event){
                 event.preventDefault();
@@ -33,9 +35,20 @@
                 const parentElement = document.getElementById('listOfItems')
                 const childElem = document.createElement('li')
                 childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phone
+                const deletebtn = document.createElement('input')
+                deletebtn.type='button'
+                deletebtn.value = 'delete'
+                deletebtn.onclick = () =>{
+                    localStorage.removeItem(obj.email)
+                    parentElement.removeChild(childElem)
+                }
+
+                childElem.appendChild(deletebtn)
                 parentElement.appendChild(childElem)
+                
+                
             }
             
-        </script>''
+        </script>
     </body>
 </html>
