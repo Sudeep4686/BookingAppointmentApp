@@ -3,32 +3,39 @@
     <body>
         <form onsubmit="saveToLocalStorage(event)">
             <label>Name</label>
-            <input type="text" name="username" required/>
+            <input type="text" id="name" name="username" required/>
             <label>Email</label>
-            <input type="email" name="emailId" required />
+            <input type="email" id='email' name="emailId" required />
             <label>Phone</label>
-            <input type="tel" name="phone" required/>
+            <input type="tel" id="phone" name="phone" required/>
             <button>Submit</button>
         </form>
+        <ul id="listOfItems"></ul>
         <script>
             function saveToLocalStorage(event){
                 event.preventDefault();
-            
                 name=event.target.username.value,
                 email=event.target.emailId.value,
                 phone = event.target.phone.value
-                localStorage.setItem('name',name);
-                localStorage.setItem('email', email);
-                localStorage.setItem('phone', phone)
+                //localStorage.setItem('name',name);
+                //localStorage.setItem('email', email);
+                //localStorage.setItem('phone', phone)
                 const obj = {
-                    name,email,phone
+                    name,
+                    email,
+                    phone
                 }
-                let userDetails_serialised = JSON.stringify(obj);
-                localStorage.setItem('obj',userDetails_serialised)
-
-                };
-
+                
+                localStorage.setItem(obj.email,JSON.stringify(obj))
+                showUserOnScreen(obj)
+            };
+            function showUserOnScreen(obj){
+                const parentElement = document.getElementById('listOfItems')
+                const childElem = document.createElement('li')
+                childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phone
+                parentElement.appendChild(childElem)
+            }
             
-        </script>
+        </script>''
     </body>
 </html>
