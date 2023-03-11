@@ -1,0 +1,100 @@
+<html>
+  <body>
+    <form onsubmit="saveToLocalStorage(event)">
+      <label>Name</label>
+      <input type="text" id="name" name="username" required/>
+      <label>Email</label>
+      <input type="email" id='email' name="emailId" required />
+      <label>Phone</label>
+      <input type="tel" id="phone" name="phone" required/>
+      <button>Submit</button>
+    </form>
+    <ul id="listOfItems"> </ul>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+
+    <script>
+      const base_url = "https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f";
+
+      function saveToLocalStorage(event) {
+        event.preventDefault();
+        const name = event.target.username.value;
+        const email = event.target.emailId.value;
+        const phone = event.target.phone.value;
+        const obj = {
+          name,
+          email,
+          phone
+        };
+        
+        axios.post(`${base_url}/appointmentData`, obj)
+          .then((response) => {
+            showUserOnScreen(response.data);
+          })
+          .catch((err) => {
+            document.body.innerHTML += "<h3> Something went wrong</h3>";
+            console.log(err);
+          });
+
+        event.target.reset();
+      };
+
+      function showUsers() {
+        axios.get(`${base_url}/appointmentData`)
+          .then((response) => {
+            const parentElement = document.getElementById('listOfItems');
+            parentElement.innerHTML = "";
+            for (var i = 0; i < response.data.length; i++) {
+              showUserOnScreen(response.data[i], parentElement);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      window.addEventListener("DOMContentLoaded", showUsers);
+
+      function showUserOnScreen(obj, parentElement) {
+        parentElement = parentElement || document.getElementById('listOfItems');
+
+        const childElem = document.createElement('li');
+        childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phone;
+
+        const deletebtn = document.createElement('input');
+        deletebtn.type = 'button';
+        deletebtn.value = 'delete';
+        deletebtn.onclick = () => {
+          axios.delete(`${base_url}/appointmentData/${obj._id}`)
+            .then(() => {
+              parentElement.removeChild(childElem);
+            })
+            .catch((err) => {
+              document.body.innerHTML += "<h3> Something went wrong</h3>";
+              console.log(err);
+            });
+        };
+
+        const editBtn = document.createElement('input');
+        editBtn.type = 'button';
+        editBtn.value = 'edit';
+        editBtn.onclick = () => {
+          const newName = prompt("Enter new name:", obj.name);
+          const newEmail = prompt("Enter new email:", obj.email);
+          const newPhone = prompt("Enter new phone:", obj.phone);
+
+          const newObj = {
+            name: newName || obj.name,
+            email: newEmail || obj.email,
+            phone: newPhone || obj.phone
+          };
+
+          axios.put(`${base_url}/appointmentData/${obj._id}`, newObj)
+            .then((response) => {
+              childElem.textContent = response.data.name + ' - ' + response.data.email + ' - ' + response.data.phone;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        };
+
+        childElem

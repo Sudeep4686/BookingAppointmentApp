@@ -14,6 +14,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
        
         <script>
+
             function saveToLocalStorage(event){
                 event.preventDefault();
                 name=event.target.username.value,
@@ -41,8 +42,23 @@
                 //localStorage.setItem(obj.email,JSON.stringify(obj))
                 showUserOnScreen(obj)
             };
-            function showUserOnScreen(obj){
-                const parentElement = document.getElementById('listOfItems')
+
+            window.addEventListener("DOMContentLoaded", ()=>{
+                axio.get("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData")
+                .then((response)=>{
+                    showUserOnScreen(response.data);
+
+                    
+
+                })
+                .catch((err)=>{
+                    console.log(err);
+                })
+            });
+               
+
+            function showUserOnScreen(obj,parentElement){
+                parentElement= parentElement || document.getElementById('listOfItems')
                 const childElem = document.createElement('li')
                 childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phone
                 const deletebtn = document.createElement('input')
@@ -51,25 +67,32 @@
                 deletebtn.onclick = () =>{
 
                     axios.delete("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData", obj)
-                    .then((response)=>{
+                    .then(()=>{
                         //showUserOnScreen(response.data);
                         //console.log(response.data);
+                        parentElement.removeChild(childElem);
                     })
                     .catch((err)=>{
                         document.body.innerHTML+="<h3> Something went wrong</h4>"
                         console.log(err);
-                    })
-                    //localStorage.removeItem(obj.email)
-                    parentElement.removeChild(childElem)
-                }
+                    });
+                };
 
                 const editBtn = document.createElement('input')
                 editBtn.type='button'
                 editBtn.value='edit'
                 editBtn.onclick = () => {
-                    localStorage.removeItem(obj.email)
-                    parentElement.removeChild(childElem)
-                    childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phone
+                    axios.put("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData",obj)
+                    .then(()=>{
+                        parentElement.removeChild(childElem)
+                        childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phone
+                    })
+                    .catch((err)=>{
+                        console.log(err);
+                    })
+                    
+                    // parentElement.removeChild(childElem)
+                    // childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phone
 
                 }
 
@@ -79,6 +102,9 @@
                 
                 
             }
+            window.addEventListener(()=>{
+                showUserOnScreen();
+            });
             
         </script>
     </body>
