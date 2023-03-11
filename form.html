@@ -29,7 +29,7 @@
                     phone
                 }
                 
-                axios.post("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData", obj)
+                axios.post("https://crudcrud.com/api/8970f0fcd260478aa40ded28ed598564/appointmentData", obj)
                     .then((response)=>{
                         //showUserOnScreen(response.data);
                         //console.log(response.data);
@@ -45,7 +45,7 @@
             };
 
             window.addEventListener("DOMContentLoaded", ()=>{
-                axios.get("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData")
+                axios.get("https://crudcrud.com/api/8970f0fcd260478aa40ded28ed598564/appointmentData")
                 .then((response)=>{
                     response.data.forEach((obj)=>{
                         showUserOnScreen(obj);
@@ -66,7 +66,7 @@
                 deletebtn.value = 'delete'
                 deletebtn.onclick = () =>{
 
-                    axios.delete("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData/"+ obj._id)
+                    axios.delete("https://crudcrud.com/api/8970f0fcd260478aa40ded28ed598564/appointmentData/"+ obj._id)
                     .then(()=>{
                         //showUserOnScreen(response.data);
                         //console.log(response.data);
@@ -78,23 +78,36 @@
                     });
                 };
 
-                const editBtn = document.createElement('input')
-                editBtn.type='button'
-                editBtn.value='edit'
-                editBtn.onclick = () => {
-                    axios.put("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData",obj)
+                const editBtn = document.createElement('button')
+                editBtn.textContent='edit'
+               
+                editBtn.addEventListener("click", () => {
+                    const newName = prompt('Enter  new name: ', obj.name);
+                    const newEmail = prompt('Enter  new Email: ', obj.email);
+                    const newPhone = prompt('Enter  new Phone: ', obj.phone);
+
+                    if (newName && newEmail && newPhone){
+                        obj.name = newName;
+                        obj.email = newEmail;
+                        obj.phone = newPhone;
+                        deletebtn.value = 'delete';
+                        editBtn.textContent = 'edit';
+                    }
+
+
+                    axios.put("https://crudcrud.com/api/8970f0fcd260478aa40ded28ed598564/appointmentData/"+ obj._id, obj)
                     .then(()=>{
-                        parentElement.removeChild(childElem)
+                        // parentElement.removeChild(childElem)
                         childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phone
                     })
                     .catch((err)=>{
                         console.log(err);
                     })
                     
-                    // parentElement.removeChild(childElem)
-                    // childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phone
+                    //parentElement.removeChild(childElem)
+                    childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phone
 
-                }
+                });
 
                 childElem.appendChild(deletebtn)
                 childElem.appendChild(editBtn)
@@ -102,9 +115,7 @@
                 
                 
             }
-            window.addEventListener(()=>{
-                showUserOnScreen();
-            });
+            window.addEventListener();
             
         </script>
     </body>
