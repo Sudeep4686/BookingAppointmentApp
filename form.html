@@ -33,6 +33,7 @@
                     .then((response)=>{
                         //showUserOnScreen(response.data);
                         //console.log(response.data);
+                        obj._id = response.data._id;
                     })
                     .catch((err)=>{
                         document.body.innerHTML+="<h3> Something went wrong</h4>"
@@ -44,12 +45,11 @@
             };
 
             window.addEventListener("DOMContentLoaded", ()=>{
-                axio.get("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData")
+                axios.get("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData")
                 .then((response)=>{
-                    showUserOnScreen(response.data);
-
-                    
-
+                    response.data.forEach((obj)=>{
+                        showUserOnScreen(obj);
+                    });
                 })
                 .catch((err)=>{
                     console.log(err);
@@ -66,7 +66,7 @@
                 deletebtn.value = 'delete'
                 deletebtn.onclick = () =>{
 
-                    axios.delete("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData", obj)
+                    axios.delete("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData/"+ obj._id)
                     .then(()=>{
                         //showUserOnScreen(response.data);
                         //console.log(response.data);
