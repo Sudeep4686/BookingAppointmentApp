@@ -11,7 +11,7 @@
             <button>Submit</button>
         </form>
         <ul id="listOfItems"> </ul>
-            
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
        
         <script>
             function saveToLocalStorage(event){
@@ -28,7 +28,17 @@
                     phone
                 }
                 
-                localStorage.setItem(obj.email,JSON.stringify(obj))
+                axios.post("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData", obj)
+                    .then((response)=>{
+                        //showUserOnScreen(response.data);
+                        //console.log(response.data);
+                    })
+                    .catch((err)=>{
+                        document.body.innerHTML+="<h3> Something went wrong</h4>"
+                        console.log(err);
+                    })
+
+                //localStorage.setItem(obj.email,JSON.stringify(obj))
                 showUserOnScreen(obj)
             };
             function showUserOnScreen(obj){
@@ -39,7 +49,17 @@
                 deletebtn.type='button'
                 deletebtn.value = 'delete'
                 deletebtn.onclick = () =>{
-                    localStorage.removeItem(obj.email)
+
+                    axios.delete("https://crudcrud.com/api/dd217b682bea4d759b0e6563ef645d7f/appointmentData", obj)
+                    .then((response)=>{
+                        //showUserOnScreen(response.data);
+                        //console.log(response.data);
+                    })
+                    .catch((err)=>{
+                        document.body.innerHTML+="<h3> Something went wrong</h4>"
+                        console.log(err);
+                    })
+                    //localStorage.removeItem(obj.email)
                     parentElement.removeChild(childElem)
                 }
 
